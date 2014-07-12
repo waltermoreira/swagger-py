@@ -34,7 +34,7 @@ class ValidationProcessor(SwaggerProcessor):
     """
 
     def process_resource_listing(self, resources, context):
-        required_fields = ['basePath', 'apis', 'swaggerVersion']
+        required_fields = ['apis', 'swaggerVersion']
         validate_required_fields(resources, required_fields, context)
 
         if not resources['swaggerVersion'] in SWAGGER_VERSIONS:
@@ -50,7 +50,7 @@ class ValidationProcessor(SwaggerProcessor):
 
     def process_api_declaration(self, resources, resource, context):
         required_fields = [
-            'swaggerVersion', 'basePath', 'resourcePath', 'apis',
+            'swaggerVersion', 'resourcePath', 'apis',
             'models'
         ]
         validate_required_fields(resource, required_fields, context)
