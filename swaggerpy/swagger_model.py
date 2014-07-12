@@ -163,7 +163,7 @@ class Loader(object):
         # Some extra data only known about at load time
         resource_listing['url'] = resources_url
         if not base_url:
-            base_url = resource_listing.get('basePath')
+            base_url = resource_listing.get('basePath', resources_url)
 
         # Load the API declarations
         for api in resource_listing.get('apis'):
