@@ -52,7 +52,7 @@ class Operation(object):
         :return: Implementation specific response or WebSocket connection
         """
         log.info("%s?%r" % (self.json['nickname'], urllib.urlencode(kwargs)))
-        method = self.json['httpMethod']
+        method = self.json['method']
         uri = self.uri
         params = {}
         for param in self.json.get('parameters', []):
