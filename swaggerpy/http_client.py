@@ -144,6 +144,16 @@ class ApiKeyAuthenticator(Authenticator):
         request.params[self.param_name] = self.api_key
 
 
+class TokenAuthenticator(Authenticator):
+
+    def __init__(self, host, token):
+        super(TokenAuthenticator, self).__init__(host)
+        self.token = token
+
+    def apply(self, request):
+        request.headers = {'Authorization': 'Bearer {}'.format(self.token)}
+
+
 # noinspection PyDocstring
 class SynchronousHttpClient(HttpClient):
     """Synchronous HTTP client implementation.
@@ -165,6 +175,10 @@ class SynchronousHttpClient(HttpClient):
     def set_api_key(self, host, api_key, param_name='api_key'):
         self.authenticator = ApiKeyAuthenticator(
             host=host, api_key=api_key, param_name=param_name)
+
+    def set_token(self, host, token):
+        self.authenticator = TokenAuthenticator(
+            host=host, token=token)
 
     def request(self, method, url, params=None, data=None):
         """Requests based implementation.
