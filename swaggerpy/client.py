@@ -173,7 +173,7 @@ class SwaggerClient(object):
         loader = swaggerpy.Loader(
             http_client, [WebsocketProcessor(), ClientProcessor()])
 
-        if isinstance(url_or_resource, str):
+        if isinstance(url_or_resource, basestring):
             log.debug("Loading from %s" % url_or_resource)
             self.api_docs = loader.load_resource_listing(url_or_resource)
         else:
