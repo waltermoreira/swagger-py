@@ -5,6 +5,7 @@
 """Swagger client library.
 """
 
+import json
 import logging
 import os.path
 import re
@@ -55,6 +56,8 @@ class Operation(object):
         method = self.json['method']
         uri = self.uri
         params = {}
+        data = {}
+        headers = {}
         for param in self.json.get('parameters', []):
             pname = param['name']
             value = kwargs.get(pname)
@@ -63,14 +66,21 @@ class Operation(object):
                 value = ",".join(value)
 
             if value:
-                if param['paramType'] == 'path':
+                param_type = param['paramType']
+                if param_type == 'path':
                     uri = uri.replace('{%s}' % pname, str(value))
-                elif param['paramType'] == 'query':
+                elif param_type == 'query':
                     params[pname] = value
+                elif param_type == 'form':
+                    data = value
+                elif param_type == 'body':
+                    data = (value if isinstance(value, basestring)
+                            else json.dumps(value))
+                    headers = {'Content-type': 'application/json'}
                 else:
                     raise AssertionError(
                         "Unsupported paramType %s" %
-                        param.paramType)
+                        param_type)
                 del kwargs[pname]
             else:
                 if param['required']:
@@ -88,7 +98,7 @@ class Operation(object):
             return self.http_client.ws_connect(uri, params=params)
         else:
             return self.http_client.request(
-                method, uri, params=params)
+                method, uri, params=params, data=data, headers=headers)
 
 
 class Resource(object):
