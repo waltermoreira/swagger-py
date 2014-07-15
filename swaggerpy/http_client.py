@@ -151,7 +151,7 @@ class TokenAuthenticator(Authenticator):
         self.token = token
 
     def apply(self, request):
-        request.headers = {'Authorization': 'Bearer {}'.format(self.token)}
+        request.headers['Authorization'] = 'Bearer {}'.format(self.token)
 
 
 # noinspection PyDocstring
