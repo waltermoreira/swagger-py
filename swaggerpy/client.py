@@ -165,13 +165,16 @@ class SwaggerClient(object):
     :type  http_client: HttpClient
     """
 
-    def __init__(self, url_or_resource, http_client=None):
+    def __init__(self, url_or_resource,
+                 http_client=None, extra_processors=None):
         if not http_client:
             http_client = SynchronousHttpClient()
         self.http_client = http_client
 
-        loader = swaggerpy.Loader(
-            http_client, [WebsocketProcessor(), ClientProcessor()])
+        processors = [WebsocketProcessor(), ClientProcessor()]
+        if extra_processors is not None:
+            processors.extend(extra_processors)
+        loader = swaggerpy.Loader(http_client, processors)
 
         if isinstance(url_or_resource, basestring):
             log.debug("Loading from %s" % url_or_resource)
