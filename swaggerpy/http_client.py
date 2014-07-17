@@ -180,14 +180,16 @@ class SynchronousHttpClient(HttpClient):
         self.authenticator = TokenAuthenticator(
             host=host, token=token)
 
-    def request(self, method, url, params=None, data=None, headers=None):
+    def request(self, method, url, params=None, data=None,
+                headers=None, files=None):
         """Requests based implementation.
 
         :return: Requests response
         :rtype:  requests.Response
         """
         req = requests.Request(
-            method=method, url=url, params=params, data=data, headers=headers)
+            method=method, url=url, params=params, data=data,
+            headers=headers, files=files)
         self.apply_authentication(req)
         return self.session.send(self.session.prepare_request(req))
 
