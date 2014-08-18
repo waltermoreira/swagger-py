@@ -159,10 +159,11 @@ class SynchronousHttpClient(HttpClient):
     """Synchronous HTTP client implementation.
     """
 
-    def __init__(self):
+    def __init__(self, verify=None):
         self.session = requests.Session()
         self.authenticator = None
         self.websockets = set()
+        self.verify = verify
 
     def close(self):
         self.session.close()
@@ -191,7 +192,8 @@ class SynchronousHttpClient(HttpClient):
             method=method, url=url, params=params, data=data,
             headers=headers, files=files)
         self.apply_authentication(req)
-        return self.session.send(self.session.prepare_request(req))
+        return self.session.send(self.session.prepare_request(req),
+                                 verify=self.verify)
 
     def ws_connect(self, url, params=None):
         """Websocket-client based implementation.
